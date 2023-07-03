@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# configures load balancer for the 2 servers
+
+sudo apt-get -y update
+sudo apt-get install --no-install-recommends software-properties-common
+sudo add-apt-repository ppa:vbernat/haproxy-2.7
+sudo apt-get install haproxy=2.7.\*
+sudo sed -i -e '$aENABLED=1\n' /etc/default/haproxy 
+sudo echo -e "\nfrontend httip\n\tbind *:80\n\tmode http\n\tdefault_backend web-backend\n\nbackend web-backend\n\tbalance roundrobin\n\tserver 110043-web-01 54.165.47.148 check\n\tserver 110043-02 35.153.16.143 check" /etc/haproxy/haproxy.cfg
+sudo service haproxy restart
